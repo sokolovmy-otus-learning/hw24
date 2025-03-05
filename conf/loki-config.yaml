@@ -3,6 +3,8 @@ loki:
   auth_enabled: false
   commonConfig:
     replication_factor: 1
+  server:
+    http_listen_port: 3100
   storage:
     type: 'filesystem'
   schemaConfig:
@@ -12,7 +14,7 @@ loki:
       index:
         prefix: loki_index_
         period: 24h
-      object_store: filesystem # we're storing on filesystem so there's no real persistence here.
+      object_store: filesystem
       schema: v13
 chunksCache:
   enabled: true
@@ -24,23 +26,4 @@ read:
 backend:
   replicas: 0
 write:
-  replicas: 0
-
-ingester:
-  replicas: 0
-querier:
-  replicas: 0
-queryFrontend:
-  replicas: 0
-queryScheduler:
-  replicas: 0
-distributor:
-  replicas: 0
-compactor:
-  replicas: 0
-indexGateway:
-  replicas: 0
-bloomCompactor:
-  replicas: 0
-bloomGateway:
   replicas: 0

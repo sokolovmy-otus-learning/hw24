@@ -1,8 +1,8 @@
---- # Daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: promtail-daemonset
+  namespace: logs
 spec:
   selector:
     matchLabels:
@@ -18,8 +18,8 @@ spec:
         image: grafana/promtail
         args:
         - -config.file=/etc/promtail/promtail.yaml
-        env: 
-        - name: 'HOSTNAME' # needed when using kubernetes_sd_configs
+        env:
+        - name: 'HOSTNAME'
           valueFrom:
             fieldRef:
               fieldPath: 'spec.nodeName'
@@ -41,20 +41,19 @@ spec:
       - name: promtail-config
         configMap:
           name: promtail-config
---- # configmap.yaml
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: promtail-config
+  namespace: logs
 data:
   promtail.yaml: |
     server:
       http_listen_port: 9080
       grpc_listen_port: 0
-
     clients:
     - url: http://loki-gateway.logs.svc.cluster.local/loki/api/v1/push
-
     positions:
       filename: /tmp/positions.yaml
     target_config:
@@ -96,8 +95,7 @@ data:
             - __meta_kubernetes_pod_uid
             - __meta_kubernetes_pod_container_name
           target_label: __path__
-
---- # Clusterrole.yaml
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -112,14 +110,13 @@ rules:
     - get
     - watch
     - list
-
---- # ServiceAccount.yaml
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: promtail-serviceaccount
-
---- # Rolebinding.yaml
+  namespace: logs
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:

@@ -1,5 +1,0 @@
-grafana:
-  additionalDataSources:
-    - name: Loki
-      type: loki
-      url: http://loki-gateway.logs.svc.cluster.local
