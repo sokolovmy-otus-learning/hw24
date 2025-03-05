@@ -49,6 +49,14 @@
   - Источники данных: Loki и Prometheus (проверьте в `Configuration > Data Sources`).
 - **Prometheus**: Доступен на `http://localhost:9090`.
 
+## Удаленное выполнение
+
+Если minikube запущен не удаленной машине, то можно пробросить порты с использованием ssh:
+
+```bash
+ssh -L 9090:localhost:9090 -L 3000:localhost:3000 <user>@<remote-host>
+```
+
 ## Остановка
 
 Для остановки Minikube и всех сервисов:
