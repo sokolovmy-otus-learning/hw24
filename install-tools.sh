@@ -15,8 +15,6 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
 sudo apt-get update -y
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo usermod -aG docker $USER
-echo "🔧 Применяем права для Docker..."
-newgrp docker
 echo "✅ Docker установлен! Версия:"
 docker --version
 
@@ -36,7 +34,16 @@ sudo mv kubectl /usr/local/bin/
 echo "✅ kubectl установлен! Версия:"
 kubectl version --client
 
-# 4. Установка k9s
+# 4. Установка Helm
+echo "📦 Устанавливаем Helm..."
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod +x get_helm.sh
+./get_helm.sh
+rm get_helm.sh
+echo "✅ Helm установлен! Версия:"
+helm version --short
+
+# 5. Установка k9s
 echo "🖥️ Устанавливаем k9s..."
 LATEST_K9S=$(curl -s https://api.github.com/repos/derailed/k9s/releases/latest | grep "tag_name" | cut -d '"' -f 4)
 curl -L "https://github.com/derailed/k9s/releases/download/${LATEST_K9S}/k9s_Linux_amd64.tar.gz" -o k9s.tar.gz
@@ -46,10 +53,13 @@ rm k9s.tar.gz
 echo "✅ k9s установлен! Версия:"
 k9s version
 
-# Вывод инструкций
 echo "✅ Установка завершена!"
 echo "📌 Проверьте установку:"
 echo "   docker run hello-world"
 echo "   minikube start --driver=docker"
 echo "   kubectl get nodes"
+echo "   helm version --short"
 echo "   k9s"
+
+
+newgrp docker
