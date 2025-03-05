@@ -1,9 +1,14 @@
-additionalDataSources:
-  - name: Loki
-    type: loki
-    url: http://loki.logs.svc.cluster.local:3100
-    access: proxy
-  - name: Prometheus
-    type: prometheus
-    url: http://prometheus-server.logs.svc.cluster.local
-    access: proxy
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Loki
+        type: loki
+        url: http://loki.logs.svc.cluster.local:3100
+        access: proxy
+        isDefault: false
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.logs.svc.cluster.local
+        access: proxy
+        isDefault: true
